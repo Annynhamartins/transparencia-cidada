@@ -1,56 +1,42 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const btnSimplificar = document.getElementById('btnSimplificar');
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('btnSimplificar');
+    if (!btn) return;
 
-    if (!btnSimplificar) return;
-
-    btnSimplificar.addEventListener('click', async function() {
-        const textoInput = document.getElementById('texto');
-        const categoriaInput = document.getElementById('categoria');
+    btn.addEventListener('click', async () => {
+        const texto = document.getElementById('texto').value.trim();
+        const categoria = document.getElementById('categoria').value;
         const resultadoDiv = document.getElementById('resultado');
 
-        const texto = textoInput ? textoInput.value.trim() : '';
-        const categoria = categoriaInput ? categoriaInput.value : 'licitacao';
-
         if (!texto) {
-            alert("Por favor, cole o texto do documento público!");
+            alert('Por favor, cole o texto do documento público!');
             return;
         }
 
-        btnSimplificar.innerText = "⏳ Analisando e simplificando...";
-        btnSimplificar.disabled = true;
+        btn.innerText = '⏳ Analisando e simplificando...';
+        btn.disabled = true;
 
         try {
-            const response = await fetch('https://tiktok-ai-content-studio.onrender.com/api/simplificar', {
+            const res = await fetch('https://tiktok-ai-content-studio.onrender.com/api/simplificar', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    texto: texto,
-                    categoria: categoria
-                })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ texto, categoria })
             });
 
-            if (!response.ok) {
-                throw new Error('Erro na requisição: ' + response.status);
-            }
+            if (!res.ok) throw new Error('Erro servidor');
 
-            const data = await response.json();
+            const data = await res.json();
 
             document.getElementById('outResumo').innerText = data.resumo_cidadao;
             document.getElementById('outImpacto').innerText = data.impacto_social;
             document.getElementById('outRecomendacao').innerText = data.recomendacao_fiscalizacao;
 
-            if (resultadoDiv) {
-                resultadoDiv.classList.remove('hidden');
-                resultadoDiv.style.display = 'block';
-            }
-        } catch (error) {
-            console.error("Erro na API:", error);
-            alert("O servidor no Render está ligando. Aguarde cerca de 30 segundos e tente novamente!");
+            resultadoDiv.classList.remove('hidden');
+            resultadoDiv.style.display = 'block';
+        } catch (err) {
+            alert('O servidor do Render está inicializando. Aguarde 30 segundos e tente novamente!');
         } finally {
-            btnSimplificar.innerText = "🔍 Traduzir para Linguagem Simples";
-            btnSimplificar.disabled = false;
+            btn.innerText = '🔍 Traduzir para Linguagem Simples';
+            btn.disabled = false;
         }
     });
 });
