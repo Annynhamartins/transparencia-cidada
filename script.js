@@ -25,11 +25,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ texto: texto, categoria: categoria })
+                body: JSON.stringify({
+                    texto: texto,
+                    categoria: categoria
+                })
             });
 
             if (!response.ok) {
-                throw new Error(Erro: ${response.status});
+                throw new Error('Erro na requisição: ' + response.status);
             }
 
             const data = await response.json();
@@ -44,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (error) {
             console.error("Erro na API:", error);
-            alert("O servidor do Render está ligando. Aguarde 30 segundos e clique em Traduzir novamente!");
+            alert("O servidor no Render está ligando. Aguarde cerca de 30 segundos e tente novamente!");
         } finally {
             btnSimplificar.innerText = "🔍 Traduzir para Linguagem Simples";
             btnSimplificar.disabled = false;
