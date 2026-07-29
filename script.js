@@ -1,10 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const btnSimplificar = document.getElementById('btnSimplificar');
 
-    if (!btnSimplificar) {
-        console.error("Botão btnSimplificar não encontrado no HTML!");
-        return;
-    }
+    if (!btnSimplificar) return;
 
     btnSimplificar.addEventListener('click', async function() {
         const textoInput = document.getElementById('texto');
@@ -32,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             if (!response.ok) {
-                throw new Error(Erro na requisição: ${response.status});
+                throw new Error(Erro: ${response.status});
             }
 
             const data = await response.json();
@@ -46,8 +43,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 resultadoDiv.style.display = 'block';
             }
         } catch (error) {
-            console.error("Erro ao conectar com a API:", error);
-            alert("Aguarde cerca de 30 segundos enquanto o servidor no Render inicializa e tente novamente!");
+            console.error("Erro na API:", error);
+            alert("O servidor do Render está ligando. Aguarde 30 segundos e clique em Traduzir novamente!");
         } finally {
             btnSimplificar.innerText = "🔍 Traduzir para Linguagem Simples";
             btnSimplificar.disabled = false;
